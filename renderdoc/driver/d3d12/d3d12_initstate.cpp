@@ -139,11 +139,9 @@ bool D3D12ResourceManager::Prepare_InitialState(ID3D12DeviceChild *res)
         desc.SampleDesc.Quality = 0;
 
         if(isDepth)
-            desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+          desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
         else
-            desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
-
-        D3D12_RESOURCE_STATES initialState = (desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET) ? D3D12_RESOURCE_STATE_RENDER_TARGET : D3D12_RESOURCE_STATE_DEPTH_WRITE;
+          desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
 
         D3D12_HEAP_PROPERTIES defaultHeap;
         defaultHeap.Type = D3D12_HEAP_TYPE_DEFAULT;
@@ -155,7 +153,7 @@ bool D3D12ResourceManager::Prepare_InitialState(ID3D12DeviceChild *res)
         // we don't want to serialise this resource's creation, so wrap it manually
         HRESULT hr = m_Device->GetReal()->CreateCommittedResource(
             &defaultHeap, D3D12_HEAP_FLAG_NONE, &desc,
-            initialState, NULL,
+            isDepth ? D3D12_RESOURCE_STATE_DEPTH_WRITE : D3D12_RESOURCE_STATE_RENDER_TARGET, NULL,
             __uuidof(ID3D12Resource), (void **)&arrayTexture);
         RDCASSERTEQUAL(hr, S_OK);
 
