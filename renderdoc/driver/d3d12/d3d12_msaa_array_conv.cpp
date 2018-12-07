@@ -59,7 +59,7 @@ void D3D12DebugManager::CopyTex2DMSToArray(ID3D12Resource *destArray, ID3D12Reso
   dsvDesc.Texture2DArray.FirstArraySlice = 0;
   dsvDesc.Texture2DArray.MipSlice = 0;
 
-  bool depthFormat = (descMS.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL) != 0;
+  bool depthFormat = IsDepthFormat(rtvDesc.Format) || (descMS.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL) != 0;
   bool intFormat = IsUIntFormat(rtvDesc.Format) || IsIntFormat(rtvDesc.Format);
 
   bool stencil = false;
@@ -322,7 +322,7 @@ void D3D12DebugManager::CopyArrayToTex2DMS(ID3D12Resource *destMS, ID3D12Resourc
   dsvDesc.Format = srvDesc.Format;
   dsvDesc.Texture2DMSArray.ArraySize = 1;
 
-  bool isDepth = (descArr.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL) != 0;
+  bool isDepth = IsDepthFormat(rtvDesc.Format) || (descArr.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL) != 0;
   bool intFormat = IsUIntFormat(rtvDesc.Format) || IsIntFormat(rtvDesc.Format);
 
   bool stencil = false;
